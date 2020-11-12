@@ -16,6 +16,13 @@ circle(screen, (240, 233, 13), (200, 200), 100)
 circle(screen, (0, 0, 0), (200, 200), 100, 2)
 # draw a rectangle for mouth
 rect(screen, (0, 0, 0), (150, 250, 100, 20))
+# draw eyeballs
+circle(screen, (255, 0, 0), (150, 200), 30)
+circle(screen, (255, 0, 0), (250, 200), 20)
+# draw pupils
+circle(screen, (0, 0, 0), (150, 200), 12)
+circle(screen, (9, 0, 0), (250, 200), 8)
+
 
 
 pygame.display.update()

@@ -22,6 +22,29 @@ circle(screen, (255, 0, 0), (250, 200), 20)
 # draw pupils
 circle(screen, (0, 0, 0), (150, 200), 12)
 circle(screen, (9, 0, 0), (250, 200), 8)
+# ------------drawing eybrows------------
+# left eyebrow
+# create a surface for rotation
+left_eyebrow_surface = pygame.Surface((15, 120))
+# fill with color for excluding
+left_eyebrow_surface.fill((255, 0, 0))
+# exclude this color
+left_eyebrow_surface.set_colorkey((255, 0, 0))
+# draw a rectangle inside surface
+rect(left_eyebrow_surface, (0, 0, 0), (0, 0, 15, 120))
+# create a new rotated surface
+left_eyebrow_surface = pygame.transform.rotate(left_eyebrow_surface, 70)
+# draw it on parent screen
+screen.blit(left_eyebrow_surface, (70, 126))
+# right eyebrow
+right_eyebrow_surface = pygame.Surface((15, 120))
+right_eyebrow_surface.fill((255, 0, 0))
+right_eyebrow_surface.set_colorkey((255, 0, 0))
+rect(right_eyebrow_surface, (0, 0, 0), (0, 0, 15, 120))
+right_eyebrow_surface = pygame.transform.rotate(right_eyebrow_surface, -65)
+screen.blit(right_eyebrow_surface, (220, 126))
+# ------------------------------------
+
 
 
 

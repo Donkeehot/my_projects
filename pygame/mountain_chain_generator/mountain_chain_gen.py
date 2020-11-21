@@ -2,59 +2,72 @@ import pygame
 import random
 import math
 
+
+def mountain_chain_gen(screen, points, y_start, y_end, color, max_height = 0, randomness = 50, x_start = 0, x_end = 0):
+    surface = pygame.display.get_surface()
+    
+    if max_height == 0:
+        max_height = surface.get_height()
+
+
+    if x_end == 0:
+        x_end = surface.get_width()
+    x_coordinates = []
+# calculate distance betwen points along x axis
+    x_increment = int(abs(x_start - x_end) / (points - 1))
+# calculate values for points random distribution
+    jitter = int(((x_increment / 100) * randomness) / 2)
+
+# genrating coordinates along X axis 
+    for i in range((points - 2)):
+        x = random.randint(x_increment + (x_increment * i) - jitter, x_increment + (x_increment * i) + jitter)
+        x_coordinates.append(x)
+
+
+    x_coordinates.append(x_end)
+    x_coordinates.insert(0, x_start)
+
+
+# generate coordinates along Y
+    y_coordinates = []
+    
+# calculate tgA to calculate minimum y value at each x point
+    tg_a = abs(x_end / (y_start - y_end))
+    for i in range(points - 2):
+        y_min_rand_start = (int(math.ceil(x_coordinates[i + 1] / tg_a))) + y_start
+        y = random.randint(y_min_rand_start, max_height)
+        y_coordinates.append(y)
+
+    y_coordinates.append(y_end)
+    y_coordinates.insert(0, y_start)
+
+    
+# flip mountain
+    screen_height = surface.get_height()
+    for i in range(len(y_coordinates)):
+        y_coordinates[i] = screen_height - y_coordinates[i]
+
+
+    
+# make one list of coordinates
+    mountain_path = []
+    for i in range(points):
+        coordinate = (x_coordinates[i], y_coordinates[i])
+        mountain_path.append(coordinate)
+
+
+    pygame.draw.polygon(screen, (color), (mountain_path))
+
+
 pygame.init()
 
 
 FPS = 30
 WIDTH = 800
 HEIGHT = 600
-points = 20
-randomness = 100
-x_coordinates = []
-x_start = 0
-x_end = 800
-x_increment = int(WIDTH / (points - 1))
-jitter = int(((x_increment / 100) * randomness) / 2)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# genrating coordinates along X axis 
-for i in range((points - 2)):
-    x = random.randint(x_increment + (x_increment * i) - jitter, x_increment + (x_increment * i) + jitter)
-    x_coordinates.append(x)
-
-
-print(jitter)
-x_coordinates.append(x_end)
-x_coordinates.insert(0, x_start)
-print(x_coordinates)
-
-# generate coordinates along Y
-y_coordinates = []
-y_start = 200
-y_end = 300
-# calculate tgA
-tg_a = abs(WIDTH / (y_start - y_end))
-for i in range(points - 2):
-    y_min_rand_start = (int(math.ceil(x_coordinates[i + 1] / tg_a))) + y_start
-    y = random.randint(y_min_rand_start, 500)
-    y_coordinates.append(y)
-
-y_coordinates.append(y_end)
-y_coordinates.insert(0, y_start)
-# flip mountain
-for i in range(len(y_coordinates)):
-    y_coordinates[i] = HEIGHT - y_coordinates[i]
-
-
-    
-# make one list of coordinates
-mountain_path = []
-for i in range(points):
-    coordinate = (x_coordinates[i], y_coordinates[i])
-    mountain_path.append(coordinate)
-
-
-pygame.draw.polygon(screen, (255, 255, 255), (mountain_path))
+mountain_chain_gen(screen, 20, 0, 100, (100, 100, 100))
 
 pygame.display.update()
 clock = pygame.time.Clock()

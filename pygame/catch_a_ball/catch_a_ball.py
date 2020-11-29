@@ -18,6 +18,7 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 points = 0
 
+# create ball in random place of screen with random parameters
 def new_ball():
     global x, y, r
     x = randint(100, 1100)
@@ -26,6 +27,7 @@ def new_ball():
     color = COLORS[randint(0, 5)]
     circle(screen, color, (x, y), r)
 
+# determine if click is inside the ball and add point to a variable
 def click(event):
     global points
     mouse_click_x, mouse_click_y = event.pos
@@ -36,6 +38,8 @@ def click(event):
         print("You have:", points, "points.")
     else:
         print("Missed!")
+
+
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False

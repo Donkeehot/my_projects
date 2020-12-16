@@ -7,7 +7,7 @@ class BallSine():
     def __init__(self):
         self.screen = pygame.display.get_surface()
         # radius of ball
-        self.radius = random.randint(5, 10)
+        self.radius = random.randint(10, 20)
         # start points of sine function
         self.x_start_sine = 0
         self.y_start_sine = 0
@@ -20,12 +20,17 @@ class BallSine():
         self.random_point = 0
         self.orig_sine_angle = 0
         self.color = tuple(random.randint(0, 255) for i in range(3))
+        # init points to store coordinates of ball
+        self.x_point_rotated = 0
+        self.y_point_rotated = 0
+        # needed for future use in click function
+        self.movement_type = 'sin'
 # move ball with sine interpolation and draw it on surface
 # angle_inc - amount of radians per tick, changes moving smoothness of ball
 # amp_multiplyer - changes amplitude of sine function
 # x_inc - changes period of sine function
     def move_sin(self, angle_inc = 12, amp_multiplyer = 5, x_inc = 1):
-# randomly choose one of 4 points to place sine function
+# randomly choose one of 4 points to place sine function and then set appropriate angle and reset sine points generation
         if self.random_point == 0:
             self.random_point = random.randint(1, 4)
             if self.random_point == 1:
@@ -62,17 +67,28 @@ class BallSine():
 
 
 # rotate points by angle and move to a needed location
-        x_point_rotated = (self.x_start_sine * math.cos(self.angle) + self.y_start_sine * -1 * math.sin(self.angle)) + self.x_rotated_start_sine
-        y_point_rotated = (self.x_start_sine * math.sin(self.angle) + self.y_start_sine * math.cos(self.angle)) + self.y_rotated_start_sine
+        self.x_point_rotated = (self.x_start_sine * math.cos(self.angle) + self.y_start_sine * -1 * math.sin(self.angle)) + self.x_rotated_start_sine
+        self.y_point_rotated = (self.x_start_sine * math.sin(self.angle) + self.y_start_sine * math.cos(self.angle)) + self.y_rotated_start_sine
 
 # checks if ball goes beyond screen space
-        if (x_point_rotated > self.screen.get_width() + (self.radius * 10)) \
-        or (x_point_rotated < (0 - self.radius * 10)) \
-        or (y_point_rotated > (self.screen.get_height() + (self.radius * 10))) \
-        or (y_point_rotated < (0 - self.radius * 10)):
+        if (self.x_point_rotated > self.screen.get_width() + (self.radius * 10)) \
+        or (self.x_point_rotated < (0 - self.radius * 10)) \
+        or (self.y_point_rotated > (self.screen.get_height() + (self.radius * 10))) \
+        or (self.y_point_rotated < (0 - self.radius * 10)):
             self.random_point = 0
-            self.radius = random.randint(5, 10)
+            self.radius = random.randint(10, 20)
             self.color = tuple(random.randint(0, 255) for i in range(3))
+            
+        pygame.draw.circle(self.screen, self.color, (self.x_point_rotated, self.y_point_rotated), self.radius)
 
-        pygame.draw.circle(self.screen, self.color, (x_point_rotated, y_point_rotated), self.radius)
-        pygame.draw.circle(self.screen, (255, 0, 0), (self.x_start_sine, self.y_start_sine), self.radius)
+    def get_x_cor(self):
+        return self.x_point_rotated
+
+    def get_y_cor(self):
+        return self.y_point_rotated
+
+    def get_radius(self):
+        return self.radius
+
+    def get_movement_type(self):
+        return self.movement_type

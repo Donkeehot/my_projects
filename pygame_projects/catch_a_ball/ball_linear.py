@@ -2,7 +2,6 @@
 
 import random
 import pygame
-import math
 
 class BallLinear():
     def __init__(self):
@@ -13,7 +12,7 @@ class BallLinear():
         self.color = tuple(random.randrange(0, 255) for i in range(3))
         self.x_inc = random.randint(-5, 5)
         self.y_inc = random.randint(-5, 5)
-
+        self.movement_type = 'linear'
 # move ball with linear interpolation and draw it on surface
     def move_linear(self):
         if not (self.x_inc and self.y_inc):
@@ -52,3 +51,6 @@ class BallLinear():
 
     def get_radius(self):
         return self.radius
+
+    def get_movement_type(self):
+        return self.movement_type
